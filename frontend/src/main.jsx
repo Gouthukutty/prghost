@@ -14,7 +14,9 @@ function App() {
     setLoading(false)
   }
 
-  useEffect(() => { loadTasks() }, [])
+  useEffect(() => {
+    loadTasks()
+  }, [])
 
   const addTask = async (e) => {
     e.preventDefault()
@@ -25,6 +27,7 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title })
     })
+
     setTitle('')
     loadTasks()
   }
@@ -35,49 +38,106 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ completed: !task.completed })
     })
+
     loadTasks()
   }
 
   const deleteTask = async (id) => {
-    await fetch(`/api/tasks/${id}`, { method: 'DELETE' })
+    await fetch(`/api/tasks/${id}`, {
+      method: 'DELETE'
+    })
+
     loadTasks()
   }
 
   return (
-    <main className="container">
-      <section className="card">
-        <h1>TaskFlow</h1>
-        <p className="subtitle">Production-style DevOps demo application</p>
+    <>
+      {/* Navigation Bar */}
+      <nav className="navbar">
+        <div className="nav-logo">TaskFlow</div>
 
-        <form onSubmit={addTask} className="form">
-          <input
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            placeholder="Enter a task..."
-          />
-          <button>Add Task</button>
-        </form>
+        <div className="nav-links">
+          <a href="#home">Home</a>
+          <a href="#tasks">Tasks</a>
+          <a href="#about">About</a>
+        </div>
+      </nav>
 
-        {loading ? <p>Loading...</p> : (
-          <div className="tasks">
-            {tasks.length === 0 && <p className="empty">No tasks yet.</p>}
-            {tasks.map(task => (
-              <div className="task" key={task.id}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={task.completed}
-                    onChange={() => toggleTask(task)}
-                  />
-                  <span className={task.completed ? 'done' : ''}>{task.title}</span>
-                </label>
-                <button className="delete" onClick={() => deleteTask(task.id)}>Delete</button>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-    </main>
+      {/* Main Content */}
+      <main className="container" id="home">
+        <section className="card" id="tasks">
+
+          <h1>TaskFlow</h1>
+
+          <p className="subtitle">
+            Production-style DevOps demo application
+          </p>
+
+          <form onSubmit={addTask} className="form">
+            <input
+              type="text"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              placeholder="Enter a task..."
+            />
+
+            <button type="submit">
+              Add Task
+            </button>
+          </form>
+
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <div className="tasks">
+
+              {tasks.length === 0 && (
+                <p className="empty">
+                  No tasks yet.
+                </p>
+              )}
+
+              {tasks.map(task => (
+                <div className="task" key={task.id}>
+
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={task.completed}
+                      onChange={() => toggleTask(task)}
+                    />
+
+                    <span className={task.completed ? 'done' : ''}>
+                      {task.title}
+                    </span>
+                  </label>
+
+                  <button
+                    className="delete"
+                    onClick={() => deleteTask(task.id)}
+                  >
+                    Delete
+                  </button>
+
+                </div>
+              ))}
+
+            </div>
+          )}
+        </section>
+
+        {/* About Section */}
+        <section className="about" id="about">
+          <h2>About TaskFlow</h2>
+
+          <p>
+            TaskFlow is a production-style DevOps demo application
+            using React, Spring Boot, MySQL, Docker and AWS.
+          </p>
+        </section>
+
+      </main>
+    </>
   )
 }
 
