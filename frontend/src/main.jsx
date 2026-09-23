@@ -131,7 +131,7 @@ function App() {
           <h2>About TaskFlow</h2>
 
           <p>
-            TaskFlow is a production-style DevOps demo application
+            TaskFlow is a production-style Goutham's application
             using React, Spring Boot, MySQL, Docker and AWS.
           </p>
         </section>
